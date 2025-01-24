@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טופס הזמנת מוצרים</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(to bottom right, #4f005e, #180026);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            direction: rtl;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #4fa3ff;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #45a3ff;
+        }
+
+        @keyframes star-fall {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                transform: translateY(150vh) translateX(-100vw);
+            }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            animation: star-fall linear infinite;
+        }
+
+        #stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        #mountains {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50vh;
+            background: url('mountain.svg') no-repeat bottom center;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div id="stars"></div>
+    <div id="mountains"></div>
+    <div class="container">
+        <h1>טופס הזמנת מוצרים</h1>
+        <form id="orderForm">
+            <div class="form-group">
+                <label for="fullName">שם מלא</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">מספר טלפון</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">אימייל</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="product">בחירת מוצר</label>
+                <input type="text" id="product" name="product" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="price">מחיר</label>
+                <input type="text" id="price" name="price" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">הערות</label>
+                <textarea id="comments" name="comments" rows="3"></textarea>
+            </div>
+
+            <button type="submit">שלח הזמנה</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const product = urlParams.get('product');
+            const price = urlParams.get('price');
+            if (product) {
+                document.getElementById('product').value = product;
+            }
+            if (price) {
+                document.getElementById('price').value = price;
+            }
+
+            // יצירת כוכבים נופלים
+            for (let i = 0; i < 100; i++) {
+                let star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.animationDuration = Math.random() * 5 + 3 + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                document.getElementById('stars').appendChild(star);
+            }
+        });
+
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const order = {
+                id: Date.now(),
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                product: document.getElementById('product').value,
+                price: document.getElementById('price').value,
+                comments: document.getElementById('comments').value
+            };
+
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            alert('הזמנה נשלחה בהצלחה!');
+        });
+    </script>
+</body>
+</html>
