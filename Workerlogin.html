@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>כניסת עובדים - CoolDeal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            direction: rtl;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333333;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-top: 10px;
+            color: #666666;
+        }
+        
+        input {
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4fa3ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a3ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>כניסת עובדים</h1>
+        <form id="workerLoginForm">
+            <label for="fullName">שם מלא</label>
+            <input type="text" id="fullName" name="fullName" required>
+            
+            <label for="password">סיסמה</label>
+            <input type="password" id="password" name="password" required>
+            
+            <label for="employeePassword">סיסמת עובדים</label>
+            <input type="password" id="employeePassword" name="employeePassword" required>
+            
+            <button type="submit">היכנס</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('workerLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            const password = document.getElementById('password').value;
+            const employeePassword = document.getElementById('employeePassword').value;
+            
+            // תנאים לאימות
+            if (fullName === 'נועם נפתלי' && password === 'naftali...' && employeePassword === '1047') {
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'cooldeal-admins-workers-site-noam-private-html-workers-center.html';
+            } else {
+                alert('אימות נכשל. אנא בדוק את הפרטים ונסה שוב.');
+            }
+        });
+    </script>
+</body>
+</html>
