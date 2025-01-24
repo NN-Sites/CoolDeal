@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טופס הזמנת מוצרים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            direction: rtl;
+        }
+        
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 400px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-top: 10px;
+            color: #666666;
+        }
+        
+        input, select, textarea {
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>טופס הזמנת מוצרים</h1>
+        <form id="orderForm">
+            <label for="fullName">שם מלא</label>
+            <input type="text" id="fullName" name="fullName" required>
+    
+            <label for="email">אימייל</label>
+            <input type="email" id="email" name="email" required>
+    
+            <label for="phone">מספר טלפון</label>
+            <input type="tel" id="phone" name="phone" required>
+    
+            <label for="product">בחירת מוצר</label>
+            <input type="text" id="product" name="product" readonly>
+    
+            <label for="price">מחיר</label>
+            <input type="text" id="price" name="price" readonly>
+    
+            <label for="comments">הערות</label>
+            <textarea id="comments" name="comments" rows="4"></textarea>
+    
+            <button type="submit">שלח הזמנה</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const product = urlParams.get('product');
+            const price = urlParams.get('price');
+            if (product) {
+                document.getElementById('product').value = product;
+            }
+            if (price) {
+                document.getElementById('price').value = price;
+            }
+        });
+
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(document.getElementById('orderForm'));
+
+            const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeQePu7Xh8ZlFdJai-CD_fm75zzYTnU1GVw1xofbLzjbxs0Ew/formResponse'; // כתובת ה-POST של גוגל פורמס
+            const urlParams = new URLSearchParams();
+            
+            formData.forEach((value, key) => {
+                // מיפוי השדות בטופס שלך לשדות בגוגל פורמס
+                const fieldMap = {
+                    'fullName': 'entry.1708352603',
+                    'email': 'entry.1725434457',
+                    'phone': 'entry.314752246',
+                    'product': 'entry.331250521',
+                    'price': 'entry.1943289564',
+                    'comments': 'entry.1744497013'
+                };
+                const googleFieldName = fieldMap[key];
+                urlParams.append(googleFieldName, value);
+            });
+
+            fetch(googleFormUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: urlParams
+            }).then(() => {
+                alert('הזמנה נשלחה בהצלחה!');
+            }).catch((error) => {
+                console.error('Error!', error.message);
+            });
+        });
+    </script>
+</body>
+</html>
