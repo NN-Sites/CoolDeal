@@ -131,10 +131,10 @@
             }
         });
 
-        document.getElementById('orderForm').addEventListener('submit', function(event) {
+        function submitOrder(event) {
             event.preventDefault();
-            const order = {
-                id: Date.now(),
+
+            const orderData = {
                 fullName: document.getElementById('fullName').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
@@ -143,11 +143,24 @@
                 comments: document.getElementById('comments').value
             };
 
-            let orders = JSON.parse(localStorage.getItem('orders')) || [];
-            orders.push(order);
-            localStorage.setItem('orders', JSON.stringify(orders));
-            alert('הזמנה נשלחה בהצלחה!');
-        });
+            fetch('https://script.google.com/macros/s/AKfycbzGjIjy7Z5R9EybQ2TQ74Lw-UKURUpnm6-NH0D0ceiexRJycA9iOly5YeN7BU9Uyeyw/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Success:', data);
+                alert('הזמנה נשלחה בהצלחה!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        document.getElementById("orderForm").addEventListener("submit", submitOrder);
     </script>
 </body>
 </html>
