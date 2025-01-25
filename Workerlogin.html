@@ -87,7 +87,8 @@
             const employeePassword = document.getElementById('employeePassword').value;
             
             // תנאים לאימות
-            if (fullName === 'נועם נפתלי' && password === 'naftali...' && employeePassword === '1047') {
+            if ((fullName === 'נועם נפתלי' && password === 'naftali...' && employeePassword === '1047') || 
+                (fullName === 'BenIshay' && password === '0808' && employeePassword === '1047')) {
                 localStorage.setItem('isLoggedIn', 'true');
                 window.location.href = 'https://docs.google.com/forms/d/1Q4ij7hwA3u6OiEDs-Wnx-OwqLPZKk9hEnYkIoj6FGYI/edit#responses';
             } else {
